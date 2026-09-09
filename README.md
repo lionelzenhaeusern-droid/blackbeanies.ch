@@ -1,2 +1,0 @@
-# blackbeanies.ch
-Band Website
