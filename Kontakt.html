@@ -28,6 +28,48 @@
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
   <script>
+    (function() {
+    function gdprConfirmed() {
+        return true;
+    }
+
+    var added = false;
+    var currentScript = document.currentScript;
+
+    function insertHTML(html) {
+        var container = document.createElement('div');
+        container.innerHTML = html;
+        container.querySelectorAll('script').forEach(s => {
+            const ns = document.createElement('script');
+            ns.async = s.async;
+            if (s.src) {
+                ns.src = s.src;
+            } else {
+                ns.textContent = s.textContent;
+            }
+            s.replaceWith(ns);
+        });
+
+            var fragment = document.createDocumentFragment();
+            fragment.append(...container.childNodes);
+
+            if (currentScript && currentScript.parentNode) {
+                currentScript.after(fragment);
+            }
+    }
+
+    window._npAddGAnalytics = function () {
+        if (gdprConfirmed() && !added) {
+            var gaBody = "<!-- Google Analytics -->\n    <gascript async src=\"https://www.googletagmanager.com/gtag/js?id=G-TGMYQ6MG5G\"></gascript>\n    <gascript>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n        gtag('config', 'G-TGMYQ6MG5G');\n    </gascript>\n    <!-- End Google Analytics -->";
+            var replacedBody = gaBody.replace(/gascript/g, 'script');
+            insertHTML(replacedBody);
+            added = true;
+        }
+    }
+
+    window._npAddGAnalytics();
+    })();
+    </script><meta name="google-site-verification" content="Xy-x39YtnzFb6ZnDdEyB_TQbGzBtBG1t4H3W7L7dexM"><script>
     window.recaptchaRenderedV2 = false;
     window.recaptchaFallback = false;
     window.recaptchaSiteKeyV2 = '6LebRIorAAAAAEBCYCVXLpZKNt1KxwfbefWqDvFL';
